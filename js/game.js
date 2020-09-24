@@ -46,39 +46,6 @@ const computerChoice = () => {
 // DRYING UP OUR CODE
 const displayMessage = message => alert(message);
 
-// initialize game function
-const initializeGame = () => {
-  /**
-   * 2 Scenarios
-   * - NO MATTER WHAT ALWAYS PICK A RANDOM LETTER
-   *
-   *
-   * A- on the first load
-   *  - show the wins, losses, guesses left as the initial data
-   *  - show the user guesses array with no letters
-   *
-   *
-   * B- after a win/loss game condition is met ( after a game has finished )
-   *  - show the wins, losses --->(increment of + 1 to a loss/win based on game end HAPPENS IN EVENT LISTENER)
-   *  - clear out the old guesses & show the user guesses array with no letters
-   *  - show the guesses left for a new game (same as the initial load)
-   */
-
-  //  Scenario A
-
-  // check if the user has already played the game and is resetting
-  if (userGuesses.length > 0 && guessesLeft !== 10) {
-    userGuesses = []; // when we reset/re-initialize the game update the previous game's guesses back to nothing
-    guessesLeft = 10;
-  }
-
-  winsElement(); // no matter what the value is for win/losses it will always update the right amount
-  lossesElement();
-  guessesLeftElement();
-  userGuessesElement();
-  computerChoice();
-};
-
 const takeTurn = userChoice => {
   // then decrement # of guess
   guessesLeft -= 1;
@@ -118,6 +85,22 @@ const checkForValidTurn = userChoice => {
   }
 };
 
+/**
+ * @Flow
+ * setup a variable to hold our future markup as a string
+ * loop through the array of letters and generate a button markup for each letter
+ * append each button to the previous saved string containing all the button markup
+ */
+const generateLetterButtons = () => {
+  let letterButtons = '';
+
+  letters.forEach(function(letter) {
+    letterButtons += `<button type="button" class="btn btn-outline-info" style="margin:3px">${letter}</button>`;
+  });
+
+  return letterButtons;
+};
+
 // Event Listeners
 
 // listen for the user to type a key in the keyboard
@@ -136,6 +119,41 @@ document.addEventListener('keypress', function(event) {
   checkForValidTurn(userChoice);
   checkWinCondition(userChoice);
 });
+
+// initialize game function
+const initializeGame = () => {
+  /**
+   * 2 Scenarios
+   * - NO MATTER WHAT ALWAYS PICK A RANDOM LETTER
+   *
+   *
+   * A- on the first load
+   *  - show the wins, losses, guesses left as the initial data
+   *  - show the user guesses array with no letters
+   *
+   *
+   * B- after a win/loss game condition is met ( after a game has finished )
+   *  - show the wins, losses --->(increment of + 1 to a loss/win based on game end HAPPENS IN EVENT LISTENER)
+   *  - clear out the old guesses & show the user guesses array with no letters
+   *  - show the guesses left for a new game (same as the initial load)
+   */
+
+  //  Scenario A
+
+  // check if the user has already played the game and is resetting
+  if (userGuesses.length > 0 && guessesLeft !== 10) {
+    userGuesses = []; // when we reset/re-initialize the game update the previous game's guesses back to nothing
+    guessesLeft = 10;
+  }
+
+  winsElement(); // no matter what the value is for win/losses it will always update the right amount
+  lossesElement();
+  guessesLeftElement();
+  userGuessesElement();
+  computerChoice();
+  // call the render letters and update the dom with it  --> lettersContainerElement( html string that is buult by render letters)
+  lettersContainerElement(generateLetterButtons());
+};
 
 // initialize the application
 initializeGame();
