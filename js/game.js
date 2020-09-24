@@ -34,6 +34,9 @@ const lossesElement = () => (document.getElementById('losses').innerHTML = losse
 const guessesLeftElement = () => (document.getElementById('guesses-left').innerHTML = guessesLeft);
 const userGuessesElement = () => (document.getElementById('user-guesses').innerHTML = userGuesses);
 
+// my string input will look like "<button class="btn">A</button><button class="btn">B</button>...."
+const lettersContainerElement = string => (document.getElementById('letter-buttons-container').innerHTML = string);
+
 // Utility Functions
 const computerChoice = () => {
   // recreate letters[indx]
