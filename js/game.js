@@ -76,6 +76,16 @@ const initializeGame = () => {
   computerChoice();
 };
 
+const takeTurn = userChoice => {
+  // then decrement # of guess
+  guessesLeft -= 1;
+  // (add it to the user guesses array)
+  userGuesses.push(userChoice);
+  // show the letters guessed & render the new guesses value
+  userGuessesElement();
+  guessesLeftElement();
+};
+
 // Event Listeners
 
 // listen for the user to type a key in the keyboard
@@ -101,14 +111,7 @@ document.addEventListener('keypress', function(event) {
     displayMessage('Sorry, but you cannot choose the same letter twice. ');
   } else {
     // ONLY COUNT VALID CHOICES AS A TURN
-
-    // then decrement # of guess
-    guessesLeft -= 1;
-    // (add it to the user guesses array)
-    userGuesses.push(userChoice);
-    // show the letters guessed & render the new guesses value
-    userGuessesElement();
-    guessesLeftElement();
+    takeTurn(userChoice);
   }
 
   // check the userChoice against the randomLetter chosen by PC
