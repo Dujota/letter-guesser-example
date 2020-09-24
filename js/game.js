@@ -86,34 +86,7 @@ const takeTurn = userChoice => {
   guessesLeftElement();
 };
 
-// Event Listeners
-
-// listen for the user to type a key in the keyboard
-document.addEventListener('keypress', function(event) {
-  /**
-   * @FLOW
-   * when the user types a key on their keyboard
-   * then we should reduce the # of guesses right away
-   * then we check if the guess is correct
-   * else if check if they can still guess
-   * if win/lose, update the correct state value AND reset the game
-   *
-   */
-
-  // save the value of the key that was pressed into a variable
-  const userChoice = event.key.toLowerCase(); // always convert the data to a unifor type
-
-  if (!letters.includes(userChoice)) {
-    // * exclude: numbers & special chars
-    displayMessage('No special characters or number, please pick a letter from the alphabet');
-  } else if (userGuesses.includes(userChoice)) {
-    // * exclude: duplicate choices
-    displayMessage('Sorry, but you cannot choose the same letter twice. ');
-  } else {
-    // ONLY COUNT VALID CHOICES AS A TURN
-    takeTurn(userChoice);
-  }
-
+const checkWinCondition = userChoice => {
   // check the userChoice against the randomLetter chosen by PC
   if (randomLetter === userChoice) {
     // if right ---> win, then increment wins and show winning message & reset the game
@@ -127,6 +100,38 @@ document.addEventListener('keypress', function(event) {
     losses += 1;
     initializeGame();
   }
+};
+
+const checkForValidTurn = userChoice => {
+  if (!letters.includes(userChoice)) {
+    // * exclude: numbers & special chars
+    displayMessage('No special characters or number, please pick a letter from the alphabet');
+  } else if (userGuesses.includes(userChoice)) {
+    // * exclude: duplicate choices
+    displayMessage('Sorry, but you cannot choose the same letter twice. ');
+  } else {
+    // ONLY COUNT VALID CHOICES AS A TURN
+    takeTurn(userChoice);
+  }
+};
+
+// Event Listeners
+
+// listen for the user to type a key in the keyboard
+document.addEventListener('keypress', function(event) {
+  /**
+   * @FLOW
+   * when the user types a key on their keyboard
+   * then we should reduce the # of guesses right away
+   * then we check if the guess is correct
+   * else if check if they can still guess
+   * if win/lose, update the correct state value AND reset the game
+   *
+   */
+  const userChoice = event.key.toLowerCase(); // always convert the data to a unifor type
+
+  checkForValidTurn(userChoice);
+  checkWinCondition(userChoice);
 });
 
 // initialize the application
