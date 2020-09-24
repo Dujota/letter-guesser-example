@@ -21,7 +21,7 @@ let randomLetter;
 const letters = 'abcdefghijklmnopqrstuvwxyz'.split(''); // generate an array from the string of letters
 
 /**
- * @prop {UI functions}
+ * @prop {UI functions} --- HELP US RENDER THE UPDATES
  *
  *
  * use functions to store code that will manipulate the DOM for you.
@@ -39,6 +39,9 @@ const computerChoice = () => {
   // recreate letters[indx]
   randomLetter = letters[Math.floor(Math.random() * letters.length)]; // translates to letters[22] for example
 };
+
+// DRYING UP OUR CODE
+const displayMessage = message => alert(message);
 
 // initialize game function
 const initializeGame = () => {
@@ -76,12 +79,52 @@ const initializeGame = () => {
 // Event Listeners
 
 // listen for the user to type a key in the keyboard
-// check that against the random letter chosen by PC
-// if right ---> win, then increment wins and show winning message
-// if wrong,--> then decrement # of guess
-// check that # of guesses not 0 and show the letter guessed
-// if no guesses left, then --->  losses + 1 to a loss based on game end
-//   a.) ['a','b','c'..... 10th elm] <-- at the time of the loss condition
+document.addEventListener('keypress', function(event) {
+  /**
+   * @FLOW
+   * when the user types a key on their keyboard
+   * then we should reduce the # of guesses right away
+   * then we check if the guess is correct
+   * else if check if they can still guess
+   * if win/lose, update the correct state value AND reset the game
+   *
+   */
+
+  // save the value of the key that was pressed into a variable
+  const userChoice = event.key.toLowerCase(); // always convert the data to a unifor type
+
+  if (!letters.includes(userChoice)) {
+    // * exclude: numbers & special chars
+    displayMessage('No special characters or number, please pick a letter from the alphabet');
+  } else if (userGuesses.includes(userChoice)) {
+    // * exclude: duplicate choices
+    displayMessage('Sorry, but you cannot choose the same letter twice. ');
+  } else {
+    // ONLY COUNT VALID CHOICES AS A TURN
+
+    // then decrement # of guess
+    guessesLeft -= 1;
+    // (add it to the user guesses array)
+    userGuesses.push(userChoice);
+    // show the letters guessed & render the new guesses value
+    userGuessesElement();
+    guessesLeftElement();
+  }
+
+  // check the userChoice against the randomLetter chosen by PC
+  if (randomLetter === userChoice) {
+    // if right ---> win, then increment wins and show winning message & reset the game
+    wins += 1;
+    displayMessage("Way to go!!!!, You're a freakin mind reader!!!");
+    initializeGame();
+  } else if (guessesLeft === 0) {
+    // if no guesses left, then --->  losses + 1 to a loss based on game end AND reset the game
+    //   a.) ['a','b','c'..... 10th elm] <-- at the time of the loss condition
+    displayMessage('Oooops you ran out of Guesses!');
+    losses += 1;
+    initializeGame();
+  }
+});
 
 // initialize the application
 initializeGame();
